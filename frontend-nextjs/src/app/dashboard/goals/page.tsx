@@ -29,11 +29,14 @@ function hdrs() {
 }
 async function apiFetch(url: string, opts?: RequestInit) {
   const res = await fetch(url, { ...opts, headers: { ...hdrs(), ...(opts?.headers || {}) } });
-  if (res.status === 401 || res.status === 403) {
+  if (res.status === 401) {
     localStorage.removeItem('erp_token');
     document.cookie = 'erp_auth=; path=/; max-age=0';
     window.location.href = '/login';
     throw new Error('Session expired');
+  }
+  if (res.status === 403) {
+    throw new Error('HTTP 403 — Access denied');
   }
   return res;
 }

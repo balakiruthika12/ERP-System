@@ -20,15 +20,19 @@ function buildHeaders(extra?: Record<string, string>): HeadersInit {
 }
 
 async function handleResponse<T>(res: Response): Promise<T> {
-  if (res.status === 401 || res.status === 403) {
-    // Token missing, expired, or invalid — clear and force re-login
+  if (res.status === 401) {
+    // Token missing or expired — clear and force re-login
     if (typeof window !== 'undefined') {
       localStorage.removeItem('erp_token');
       localStorage.removeItem('erp_email');
       document.cookie = 'erp_auth=; path=/; max-age=0';
       window.location.href = '/login';
     }
-    throw new Error(`HTTP ${res.status} — Session expired. Please log in again.`);
+    throw new Error('Session expired. Please log in again.');
+  }
+  if (res.status === 403) {
+    // Logged in but insufficient permissions — do NOT log out
+    throw new Error('HTTP 403 — Access denied for this resource.');
   }
   if (!res.ok) {
     const text = await res.text().catch(() => res.statusText);

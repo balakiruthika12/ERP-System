@@ -17,11 +17,18 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Using a securely generated key for HS256
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Value("${app.jwt.secret:3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b}")
+    private String secretString;
 
-    @Value("${jwt.expiration:86400000}")
-    private long expirationTime; // 1 day in ms
+    @Value("${app.jwt.expiration:86400000}")
+    private long expirationTime; // default 24 hours in ms
+
+    private Key getSigningKey() {
+        byte[] keyBytes = io.jsonwebtoken.io.Decoders.BASE64.decode(
+            java.util.Base64.getEncoder().encodeToString(secretString.getBytes(java.nio.charset.StandardCharsets.UTF_8))
+        );
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -37,7 +44,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -56,7 +63,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(key)
+                .signWith(getSigningKey())
                 .compact();
     }
 

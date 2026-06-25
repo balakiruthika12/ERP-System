@@ -20,8 +20,13 @@ export default function LoginPage() {
 
     try {
       const data = await login(email, password);
-      // Set cookie for Next.js middleware route protection (24h expiry matching JWT)
+
+      // ── Store token in localStorage so api.ts / inline fetch pages can attach it ──
+      localStorage.setItem('erp_token', data.token);
+
+      // ── Also set cookie for Next.js middleware route protection (24h) ──
       document.cookie = `erp_auth=${data.token}; path=/; max-age=86400; SameSite=Strict`;
+
       // Redirect to dashboard on successful authentication
       router.push('/dashboard');
     } catch (err: unknown) {

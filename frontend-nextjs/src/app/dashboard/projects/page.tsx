@@ -29,10 +29,28 @@ interface Project {
 }
 
 const API = 'http://localhost:8080/api/v1';
-const hdrs = () => {
-  const tok = typeof window !== 'undefined' ? localStorage.getItem('erp_token') : null;
+function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  const ls = localStorage.getItem('erp_token');
+  if (ls) return ls;
+  // Fallback: read from erp_auth cookie
+  const match = document.cookie.match(/(?:^|;\s*)erp_auth=([^;]*)/);
+  return match ? match[1] : null;
+}
+function hdrs() {
+  const tok = getToken();
   return { 'Content-Type': 'application/json', ...(tok ? { Authorization: `Bearer ${tok}` } : {}) };
-};
+}
+async function apiFetch(url: string, opts?: RequestInit) {
+  const res = await fetch(url, { ...opts, headers: { ...hdrs(), ...(opts?.headers || {}) } });
+  if (res.status === 401 || res.status === 403) {
+    localStorage.removeItem('erp_token');
+    document.cookie = 'erp_auth=; path=/; max-age=0';
+    window.location.href = '/login';
+    throw new Error('Session expired');
+  }
+  return res;
+}
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 

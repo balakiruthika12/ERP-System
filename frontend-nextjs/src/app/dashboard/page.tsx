@@ -104,8 +104,15 @@ interface ProjectSummary {
 }
 
 const API = 'http://localhost:8080/api/v1';
+function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  const ls = localStorage.getItem('erp_token');
+  if (ls) return ls;
+  const match = document.cookie.match(/(?:^|;\s*)erp_auth=([^;]*)/);
+  return match ? match[1] : null;
+}
 const hdrs = () => {
-  const tok = typeof window !== 'undefined' ? localStorage.getItem('erp_token') : null;
+  const tok = getToken();
   return { 'Content-Type': 'application/json', ...(tok ? { Authorization: `Bearer ${tok}` } : {}) };
 };
 

@@ -24,9 +24,10 @@ public class JwtUtil {
     private long expirationTime; // default 24 hours in ms
 
     private Key getSigningKey() {
-        byte[] keyBytes = io.jsonwebtoken.io.Decoders.BASE64.decode(
-            java.util.Base64.getEncoder().encodeToString(secretString.getBytes(java.nio.charset.StandardCharsets.UTF_8))
-        );
+        // Derive a stable 256-bit HMAC key from the secret string bytes directly
+        byte[] keyBytes = new byte[32];
+        byte[] secretBytes = secretString.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        System.arraycopy(secretBytes, 0, keyBytes, 0, Math.min(secretBytes.length, 32));
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

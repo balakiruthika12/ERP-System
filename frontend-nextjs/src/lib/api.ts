@@ -7,7 +7,12 @@ const API_BASE = 'http://localhost:8080/api/v1';
 
 function getToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('erp_token');
+  // Try localStorage first
+  const ls = localStorage.getItem('erp_token');
+  if (ls) return ls;
+  // Cookie fallback (set by login page)
+  const m = document.cookie.match(/(?:^|;\s*)erp_auth=([^;]+)/);
+  return m ? m[1] : null;
 }
 
 function buildHeaders(extra?: Record<string, string>): HeadersInit {
@@ -19,21 +24,23 @@ function buildHeaders(extra?: Record<string, string>): HeadersInit {
   };
 }
 
+// Prevent duplicate redirects when multiple requests fail at the same time
+let redirecting = false;
+
 async function handleResponse<T>(res: Response): Promise<T> {
   if (res.status === 401) {
-    // Token missing, expired, or invalid — clear stale token and redirect to login
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !redirecting &&
+        !window.location.pathname.startsWith('/login')) {
+      redirecting = true;
       localStorage.removeItem('erp_token');
       localStorage.removeItem('erp_email');
       document.cookie = 'erp_auth=; path=/; max-age=0';
-      // Small delay to ensure cleanup before redirect
       window.location.href = '/login';
     }
-    throw new Error('Session expired. Redirecting to login...');
+    throw new Error('Session expired. Please log in again.');
   }
   if (res.status === 403) {
-    // Authenticated but insufficient role for this resource — do NOT log out
-    throw new Error('HTTP 403 — Access denied. You do not have permission for this resource.');
+    throw new Error('HTTP 403 — Access denied.');
   }
   if (!res.ok) {
     const text = await res.text().catch(() => res.statusText);

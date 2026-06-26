@@ -21,19 +21,19 @@ public class EmployeeController {
 
     /** Gap 2 fix: returns EmployeeDTO instead of raw Employee entity */
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<EmployeeDTO> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/department/{departmentId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER', 'EMPLOYEE')")
+    @PreAuthorize("isAuthenticated()")
     public List<EmployeeDTO> getEmployeesByDepartment(@PathVariable Long departmentId) {
         return employeeService.getEmployeesByDepartment(departmentId);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id)
                 .map(ResponseEntity::ok)
@@ -41,7 +41,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}/profile")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<EmployeeProfileDTO> getEmployeeProfile(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(employeeProfileService.getProfile(id));
@@ -51,13 +51,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody Employee employee) {
         return ResponseEntity.ok(employeeService.createEmployee(employee));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails) {
         try {
             return ResponseEntity.ok(employeeService.updateEmployee(id, employeeDetails));
@@ -67,7 +67,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();

@@ -47,13 +47,13 @@ public class ProjectController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProjectDTO> create(@RequestBody ProjectDTO dto) {
         return ResponseEntity.ok(projectService.createProject(dto));
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProjectDTO> updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(projectService.updateStatus(id, body.get("status")));
     }
@@ -71,7 +71,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();

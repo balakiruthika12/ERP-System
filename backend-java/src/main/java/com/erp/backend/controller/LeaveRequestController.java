@@ -18,25 +18,25 @@ public class LeaveRequestController {
     @Autowired private LeaveRequestService leaveRequestService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<LeaveRequestDTO> getAllLeaveRequests() {
         return leaveRequestService.getAllLeaveRequests();
     }
 
     @GetMapping("/employee/{employeeId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER', 'EMPLOYEE')")
+    @PreAuthorize("isAuthenticated()")
     public List<LeaveRequestDTO> getLeavesByEmployee(@PathVariable Long employeeId) {
         return leaveRequestService.getLeavesByEmployee(employeeId);
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER', 'EMPLOYEE')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LeaveRequestDTO> createLeaveRequest(@RequestBody LeaveRequest request) {
         return ResponseEntity.ok(leaveRequestService.createLeaveRequest(request));
     }
 
     @PutMapping("/{id}/approve")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LeaveRequestDTO> approveLeave(
             @PathVariable Long id,
             @RequestBody(required = false) Map<String, String> body) {
@@ -45,7 +45,7 @@ public class LeaveRequestController {
     }
 
     @PutMapping("/{id}/reject")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LeaveRequestDTO> rejectLeave(
             @PathVariable Long id,
             @RequestBody(required = false) Map<String, String> body) {

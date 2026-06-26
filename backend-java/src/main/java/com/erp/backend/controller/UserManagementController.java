@@ -19,7 +19,7 @@ public class UserManagementController {
     @Autowired private UserRepository userRepository;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public List<Map<String, Object>> getAllUsers() {
         return userRepository.findAll().stream().map(u -> {
             Map<String, Object> map = new java.util.LinkedHashMap<>();
@@ -35,7 +35,7 @@ public class UserManagementController {
     }
 
     @PutMapping("/{id}/toggle-active")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, Object>> toggleUserActive(@PathVariable Long id) {
         return userRepository.findById(id).map(user -> {
             user.setActive(!user.isActive());
@@ -51,7 +51,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/stats")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> getUserStats() {
         List<User> all = userRepository.findAll();
         return Map.of(

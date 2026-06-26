@@ -17,25 +17,25 @@ public class PayrollController {
     @Autowired private PayrollService payrollService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<PayrollDTO> getAllPayrolls() {
         return payrollService.getAllPayrolls();
     }
 
     @GetMapping("/employee/{employeeId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<PayrollDTO> getPayrollsByEmployee(@PathVariable Long employeeId) {
         return payrollService.getPayrollsByEmployee(employeeId);
     }
 
     @PostMapping("/process")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PayrollDTO> processPayroll(@RequestBody Payroll payroll) {
         return ResponseEntity.ok(payrollService.processPayroll(payroll));
     }
 
     @PutMapping("/{id}/pay")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PayrollDTO> markAsPaid(@PathVariable Long id) {
         return ResponseEntity.ok(payrollService.markAsPaid(id));
     }

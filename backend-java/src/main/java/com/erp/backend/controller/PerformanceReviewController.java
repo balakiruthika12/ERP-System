@@ -27,19 +27,19 @@ public class PerformanceReviewController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<PerformanceReviewDTO> getAllReviews(@AuthenticationPrincipal UserDetails principal) {
         return reviewService.getAllReviews(resolveTenantId(principal));
     }
 
     @GetMapping("/employee/{employeeId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<PerformanceReviewDTO> getByEmployee(@PathVariable Long employeeId) {
         return reviewService.getReviewsByEmployee(employeeId);
     }
 
     @GetMapping("/employee/{employeeId}/latest")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PerformanceReviewDTO> getLatest(@PathVariable Long employeeId) {
         return reviewService.getLatestReview(employeeId)
                 .map(ResponseEntity::ok)
@@ -47,13 +47,13 @@ public class PerformanceReviewController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PerformanceReviewDTO> createReview(@RequestBody PerformanceReviewDTO dto) {
         return ResponseEntity.ok(reviewService.createReview(dto));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PerformanceReviewDTO> updateReview(@PathVariable Long id, @RequestBody PerformanceReviewDTO dto) {
         try {
             return ResponseEntity.ok(reviewService.updateReview(id, dto));
@@ -63,7 +63,7 @@ public class PerformanceReviewController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();

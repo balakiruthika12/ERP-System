@@ -17,13 +17,13 @@ public class DepartmentController {
     @Autowired private DepartmentService departmentService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER', 'EMPLOYEE')")
+    @PreAuthorize("isAuthenticated()")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER', 'EMPLOYEE')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable Long id) {
         return departmentService.getDepartmentById(id)
                 .map(ResponseEntity::ok)
@@ -31,13 +31,13 @@ public class DepartmentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DepartmentDTO> createDepartment(@RequestBody Department department) {
         return ResponseEntity.ok(departmentService.createDepartment(department));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DepartmentDTO> updateDepartment(@PathVariable Long id, @RequestBody Department departmentDetails) {
         try {
             return ResponseEntity.ok(departmentService.updateDepartment(id, departmentDetails));
@@ -47,7 +47,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
         return ResponseEntity.noContent().build();
@@ -55,7 +55,7 @@ public class DepartmentController {
 
     /** Phase 5: Returns departments enriched with monthly budget vs. actual payroll spend */
     @GetMapping("/budget-report")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<DepartmentDTO> getBudgetReport() {
         return departmentService.getBudgetReport();
     }

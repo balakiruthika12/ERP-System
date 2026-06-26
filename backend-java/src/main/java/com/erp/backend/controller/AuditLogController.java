@@ -26,13 +26,13 @@ public class AuditLogController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public List<AuditLogDTO> getRecentLogs(@AuthenticationPrincipal UserDetails principal) {
         return auditLogService.getRecentLogs(resolveTenantId(principal));
     }
 
     @GetMapping("/entity/{entityType}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<AuditLogDTO> getLogsByEntityType(
             @PathVariable String entityType,
             @AuthenticationPrincipal UserDetails principal) {

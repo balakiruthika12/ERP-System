@@ -32,7 +32,7 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AnnouncementDTO> create(@RequestBody AnnouncementDTO dto,
                                                     @AuthenticationPrincipal UserDetails principal) {
         if (dto.getAuthorName() == null && principal != null) {
@@ -42,13 +42,13 @@ public class AnnouncementController {
     }
 
     @PutMapping("/{id}/pin")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<AnnouncementDTO> togglePin(@PathVariable Long id) {
         return ResponseEntity.ok(announcementService.togglePin(id));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         announcementService.deleteAnnouncement(id);
         return ResponseEntity.noContent().build();

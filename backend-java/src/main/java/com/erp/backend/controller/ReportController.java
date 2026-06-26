@@ -15,25 +15,25 @@ public class ReportController {
     @Autowired private ReportService reportService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> getCombinedReport() {
         return reportService.getCombinedReport();
     }
 
     @GetMapping("/payroll-summary")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> getPayrollSummary() {
         return reportService.getPayrollSummary();
     }
 
     @GetMapping("/headcount")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<Map<String, Object>> getHeadcount() {
         return reportService.getHeadcountByDepartment();
     }
 
     @GetMapping("/leave-summary")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> getLeaveSummary() {
         return reportService.getLeaveSummary();
     }

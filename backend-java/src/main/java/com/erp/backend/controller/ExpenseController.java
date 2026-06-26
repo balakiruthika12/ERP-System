@@ -27,7 +27,7 @@ public class ExpenseController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<ExpenseDTO> getAllExpenses(@AuthenticationPrincipal UserDetails principal) {
         return expenseService.getAllExpenses(resolveTenantId(principal));
     }
@@ -39,7 +39,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/summary")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> getSummary(@AuthenticationPrincipal UserDetails principal) {
         return expenseService.getSummary(resolveTenantId(principal));
     }
@@ -51,7 +51,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}/approve")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ExpenseDTO> approve(@PathVariable Long id,
                                                @RequestBody Map<String, String> body,
                                                @AuthenticationPrincipal UserDetails principal) {
@@ -60,7 +60,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}/reject")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ExpenseDTO> reject(@PathVariable Long id,
                                               @RequestBody Map<String, String> body,
                                               @AuthenticationPrincipal UserDetails principal) {
@@ -69,7 +69,7 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}/reimburse")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ExpenseDTO> reimburse(@PathVariable Long id) {
         return ResponseEntity.ok(expenseService.reimbursedExpense(id));
     }

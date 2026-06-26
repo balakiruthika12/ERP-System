@@ -27,7 +27,7 @@ public class GoalController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public List<GoalDTO> getAll(@AuthenticationPrincipal UserDetails principal) {
         return goalService.getAllGoals(resolveTenantId(principal));
     }
@@ -39,25 +39,25 @@ public class GoalController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GoalDTO> create(@RequestBody GoalDTO dto) {
         return ResponseEntity.ok(goalService.createGoal(dto));
     }
 
     @PutMapping("/{id}/progress")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GoalDTO> updateProgress(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
         return ResponseEntity.ok(goalService.updateProgress(id, body.getOrDefault("progress", 0)));
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GoalDTO> updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(goalService.updateStatus(id, body.get("status")));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         goalService.deleteGoal(id);
         return ResponseEntity.noContent().build();

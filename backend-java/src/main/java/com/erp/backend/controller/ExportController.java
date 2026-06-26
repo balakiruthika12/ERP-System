@@ -24,7 +24,7 @@ public class ExportController {
     @Autowired private EmployeeRepository employeeRepository;
 
     @GetMapping("/payroll")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<byte[]> exportPayrollCsv() {
         List<Payroll> payrolls = payrollRepository.findAll();
 
@@ -53,7 +53,7 @@ public class ExportController {
     }
 
     @GetMapping("/employees")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<byte[]> exportEmployeesCsv() {
         List<Employee> employees = employeeRepository.findAll();
 

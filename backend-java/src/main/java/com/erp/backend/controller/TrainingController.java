@@ -41,25 +41,25 @@ public class TrainingController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TrainingDTO> create(@RequestBody TrainingDTO dto) {
         return ResponseEntity.ok(trainingService.createTraining(dto));
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TrainingDTO> updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(trainingService.updateStatus(id, body.get("status")));
     }
 
     @PostMapping("/{trainingId}/enroll/{employeeId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'HR_MANAGER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TrainingDTO> enroll(@PathVariable Long trainingId, @PathVariable Long employeeId) {
         return ResponseEntity.ok(trainingService.enrollEmployee(trainingId, employeeId));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         trainingService.deleteTraining(id);
         return ResponseEntity.noContent().build();

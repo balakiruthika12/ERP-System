@@ -36,7 +36,7 @@ public class DashboardController {
     @Autowired private ProjectRepository projectRepository;
 
     @GetMapping("/metrics")
-    @PreAuthorize("hasAnyRole('ADMIN', 'EXECUTIVE')")
+    @PreAuthorize("isAuthenticated()")
     public DashboardMetricsDTO getExecutiveMetrics() {
         return dashboardService.getExecutiveMetrics();
     }

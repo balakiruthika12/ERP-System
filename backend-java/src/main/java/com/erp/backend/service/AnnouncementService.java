@@ -8,11 +8,13 @@ import com.erp.backend.repository.AnnouncementRepository;
 import com.erp.backend.repository.TenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AnnouncementService {
 
     @Autowired private AnnouncementRepository announcementRepository;
@@ -59,3 +61,4 @@ public class AnnouncementService {
         return dto;
     }
 }
+

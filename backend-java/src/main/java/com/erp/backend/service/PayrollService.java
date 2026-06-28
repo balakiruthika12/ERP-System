@@ -8,6 +8,7 @@ import com.erp.backend.repository.EmployeeRepository;
 import com.erp.backend.repository.PayrollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PayrollService {
 
     @Autowired private PayrollRepository payrollRepository;
@@ -93,3 +95,4 @@ public class PayrollService {
         return dto;
     }
 }
+

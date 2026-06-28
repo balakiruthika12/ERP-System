@@ -2,11 +2,13 @@ package com.erp.backend.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 @Service
+@Transactional
 public class AiServiceClient {
 
     @Value("${ai.core.url:http://localhost:8000}")
@@ -98,3 +100,4 @@ public class AiServiceClient {
         }
     }
 }
+

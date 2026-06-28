@@ -6,6 +6,7 @@ import com.erp.backend.entity.LeaveRequest.LeaveStatus;
 import com.erp.backend.repository.LeaveRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class LeaveRequestService {
 
     @Autowired private LeaveRequestRepository leaveRequestRepository;
@@ -91,3 +93,4 @@ public class LeaveRequestService {
         return dto;
     }
 }
+

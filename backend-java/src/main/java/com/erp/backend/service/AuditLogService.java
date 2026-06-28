@@ -7,11 +7,13 @@ import com.erp.backend.entity.Tenant;
 import com.erp.backend.repository.AuditLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AuditLogService {
 
     @Autowired private AuditLogRepository auditLogRepository;
@@ -53,3 +55,4 @@ public class AuditLogService {
         return dto;
     }
 }
+

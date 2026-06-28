@@ -6,11 +6,13 @@ import com.erp.backend.repository.EmployeeRepository;
 import com.erp.backend.repository.PayrollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Service
+@Transactional
 public class DashboardService {
 
     @Autowired private EmployeeRepository employeeRepository;
@@ -50,3 +52,4 @@ public class DashboardService {
         return metrics;
     }
 }
+

@@ -7,6 +7,7 @@ import com.erp.backend.repository.EmployeeRepository;
 import com.erp.backend.repository.PayrollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class DepartmentService {
 
     @Autowired private DepartmentRepository departmentRepository;
@@ -76,3 +78,4 @@ public class DepartmentService {
         );
     }
 }
+

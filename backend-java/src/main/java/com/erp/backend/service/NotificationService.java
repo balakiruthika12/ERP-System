@@ -7,11 +7,13 @@ import com.erp.backend.entity.Tenant;
 import com.erp.backend.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NotificationService {
 
     @Autowired private NotificationRepository notificationRepository;
@@ -66,3 +68,4 @@ public class NotificationService {
         return dto;
     }
 }
+

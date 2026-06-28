@@ -15,6 +15,7 @@ import com.erp.backend.repository.ProjectTaskRepository;
 import com.erp.backend.repository.TenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProjectService {
 
     @Autowired private ProjectRepository projectRepository;
@@ -139,3 +141,4 @@ public class ProjectService {
         return dto;
     }
 }
+
